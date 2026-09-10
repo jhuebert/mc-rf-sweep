@@ -1,0 +1,14 @@
+# Deps for api_server.py and orchestrate.py
+httpx
+fastapi
+uvicorn
+python-dotenv
+pycryptodome
+PyNaCl
+pyyaml
+
+# Deps for make_plots.py
+matplotlib
+
+# pymc_core is provided by the openhop_core project — install it with:
+#   pip install -e <path-to>/openhop_core

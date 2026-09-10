@@ -1,0 +1,20 @@
+# Real credentials — never commit
+env/*.env
+node_a.env
+node_b.env
+*.env
+!env/*.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local scratch
+*.log
+nohup.out
+ssh.pass
+.kit_api_key
+
+# Local-only analysis outputs (committed campaign data lives under results/)
+results/*/plot_cache/
