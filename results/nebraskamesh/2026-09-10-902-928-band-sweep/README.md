@@ -60,6 +60,8 @@ python orchestrate.py \
 Noise floors were sampled per combination at both nodes; clock offset was
 measured per combination (±6 ms NTP-derived).
 
+## Results
+
 ### Full delivery ladder (a2b/b2a, out of 20 sent per cell)
 
 | Frequency (MHz) | SF7 | SF8 | SF9 | SF10 | SF11 | SF12 |
