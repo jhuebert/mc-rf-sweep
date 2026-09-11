@@ -5,13 +5,19 @@ openhop_modem radios **directly through openhop_core** — no openhop_repeater
 installation required. One machine next to each radio runs a small HTTP API
 server; a third script orchestrates the tests over the VPN.
 
-```
-orchestrate.py (anywhere)
-     │  HTTPS over VPN, X-API-Key auth
-     ├──────────► api_server.py @ node_a ──TCP(LAN)──► openhop_modem A
-     │                    │  tagged ping ──────── over the air ─────┐
-     │                    ▼  pong (carries B's SNR/RSSI)           │
-     └──────────► api_server.py @ node_b ──TCP(LAN)──► openhop_modem B
+```mermaid
+flowchart LR
+    O["orchestrate.py (anywhere)"]
+    SA["api_server.py @ node_a"]
+    SB["api_server.py @ node_b"]
+    MA["openhop_modem A"]
+    MB["openhop_modem B"]
+    O -- "HTTPS over VPN, X-API-Key auth" --> SA
+    O --> SB
+    SA -- "TCP (LAN)" --> MA
+    SB -- "TCP (LAN)" --> MB
+    MA -. "tagged ping, over the air" .-> MB
+    MB -. "pong (carries B's SNR/RSSI)" .-> MA
 ```
 
 Each node's API server owns its modem TCP connection (connect, auth,

@@ -5,14 +5,18 @@ Two fixed radio nodes, one scripted sweep, comparable results across
 regions and meshes — with the long-term goal of finding out whether one
 frequency is reliably best *everywhere*.
 
-```
-orchestrate.py (anywhere)
-     │  HTTP over VPN, X-API-Key auth
-     ├──────────► api_server.py @ node A ──TCP(LAN)──► openhop_modem A
-     │                    │  tagged one-way pings ────────┐
-     │                    ▼                                │
-     └──────────► api_server.py @ node B ──TCP(LAN)──► openhop_modem B
-                               ◄──── over the air ─────────┘
+```mermaid
+flowchart LR
+    O["orchestrate.py (anywhere)"]
+    SA["api_server.py @ node A"]
+    SB["api_server.py @ node B"]
+    MA["openhop_modem A"]
+    MB["openhop_modem B"]
+    O -- "HTTP over VPN, X-API-Key auth" --> SA
+    O --> SB
+    SA -- "TCP (LAN)" --> MA
+    SB -- "TCP (LAN)" --> MB
+    MA -. "tagged one-way pings, over the air" .-> MB
 ```
 
 Each node's API server owns its modem TCP connection and can reconfigure
