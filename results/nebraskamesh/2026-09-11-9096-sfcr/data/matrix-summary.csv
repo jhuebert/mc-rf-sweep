@@ -1,0 +1,9 @@
+combination,trials_ok
+"909.600 MHz, BW 500 kHz, SF10, CR4/5, 22 dBm, preamble 32 [a2b]: 91/100"
+"909.600 MHz, BW 500 kHz, SF10, CR4/5, 22 dBm, preamble 32 [b2a]: 38/100"
+"909.600 MHz, BW 500 kHz, SF10, CR4/8, 22 dBm, preamble 32 [a2b]: 90/100"
+"909.600 MHz, BW 500 kHz, SF10, CR4/8, 22 dBm, preamble 32 [b2a]: 43/100"
+"909.600 MHz, BW 500 kHz, SF11, CR4/5, 22 dBm, preamble 32 [a2b]: 95/100"
+"909.600 MHz, BW 500 kHz, SF11, CR4/5, 22 dBm, preamble 32 [b2a]: 6/100"
+"909.600 MHz, BW 500 kHz, SF11, CR4/8, 22 dBm, preamble 32 [a2b]: 88/100"
+"909.600 MHz, BW 500 kHz, SF11, CR4/8, 22 dBm, preamble 32 [b2a]: 22/99"
