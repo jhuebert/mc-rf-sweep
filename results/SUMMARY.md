@@ -9,6 +9,6 @@ sweep, we can see whether any frequency is good *on average, everywhere*.
 
 | Mesh | Location | Date | Path | Best frequencies | Dead zones | Defaults | Report |
 |---|---|---|---|---|---|---|---|
-| NebraskaMesh | Bellevue, NE, USA | 2026-09-10 | 3.9 mi, 1 indoor + 1 gazebo node | 909.5, 909.0, 906.5, 910.5, 923.0, 927.0 | 904.0, 908.0, 911.5–912.0, 919.0, 921.5–922.0, 924.0, 925.5 | 93% / 97% | [report](nebraskamesh/2026-09-10-902-928-band-sweep/) |
+| NebraskaMesh | Bellevue, NE, USA | 2026-09-10 | 3.9 mi, 1 indoor + 1 gazebo node | 909.6, 909.1, 926.8, 926.9, 909.3, 927.0, 903.1 (fine-swept) | 904.0, 908.0, 911.5–912.0, 919.0, 921.5–923.4, 925.5 | 92% / 96% | [band sweep](nebraskamesh/2026-09-10-902-928-band-sweep/) · [fine sweep](nebraskamesh/2026-09-10-fine-sweep/) |
 
 *(Your mesh here — see [results/README.md](README.md).)*

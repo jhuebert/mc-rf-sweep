@@ -38,3 +38,4 @@ combinations.
 | Campaign | Date | Report |
 |---|---|---|
 | 902–928 MHz band sweep, 500 kHz, SF7–12 + US-defaults baseline | 2026-09-10 | [2026-09-10-902-928-band-sweep](2026-09-10-902-928-band-sweep/) |
+| Fine sweep ±0.4 MHz @ 0.1 MHz around the 6 finalists, SF9–10 + same-session US-defaults control | 2026-09-10 | [2026-09-10-fine-sweep](2026-09-10-fine-sweep/) |
