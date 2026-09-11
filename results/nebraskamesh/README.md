@@ -26,7 +26,8 @@ combinations.
 
 - The indoor node (A) consistently hears ~2–4 dB worse than the outdoor
   node (B) — visible in nearly every campaign as worse *b2a* delivery
-  (transmissions *into* the indoor node).
+  (transmissions *into* the indoor node). Measured per-frequency in the
+  2026-09-11 overnight campaign: 1.1 dB (926.8) to 3.4 dB (903.1).
 - Node B's noise floor swings several dB between sessions (quiet ≈
   −100 dBm, busy ≈ −95 dBm); Node A runs ≈ −101 to −103 dBm with
   occasional strong local interference spikes (−66 dBm observed at
@@ -39,3 +40,4 @@ combinations.
 |---|---|---|
 | 902–928 MHz band sweep, 500 kHz, SF7–12 + US-defaults baseline | 2026-09-10 | [2026-09-10-902-928-band-sweep](2026-09-10-902-928-band-sweep/) |
 | Fine sweep ±0.4 MHz @ 0.1 MHz around the 6 finalists, SF9–10 + same-session US-defaults control | 2026-09-10 | [2026-09-10-fine-sweep](2026-09-10-fine-sweep/) |
+| Overnight SF×CR matrix + finalist deep passes on the fine-sweep trio (903.1 / 909.6 / 926.8), unattended campaign driver | 2026-09-10/11 | [2026-09-11-sf-cr-campaign](2026-09-11-sf-cr-campaign/) |
