@@ -1,0 +1,552 @@
+{
+  "campaigns": [
+    "cr-campaign-909-910-926",
+    "cr-campaign-9105-913"
+  ],
+  "cells": {
+    "909.5|5|a2b": {
+      "n": 200,
+      "ok": 147,
+      "rate": 0.735,
+      "max_streak": 25,
+      "streak_loss_frac": 0.849,
+      "mean_snr": -10.64,
+      "days": [
+        0
+      ]
+    },
+    "909.5|5|b2a": {
+      "n": 200,
+      "ok": 135,
+      "rate": 0.675,
+      "max_streak": 37,
+      "streak_loss_frac": 0.815,
+      "mean_snr": -12.23,
+      "days": [
+        0
+      ]
+    },
+    "909.5|6|a2b": {
+      "n": 200,
+      "ok": 183,
+      "rate": 0.915,
+      "max_streak": 2,
+      "streak_loss_frac": 0.353,
+      "mean_snr": -10.05,
+      "days": [
+        0
+      ]
+    },
+    "909.5|6|b2a": {
+      "n": 200,
+      "ok": 128,
+      "rate": 0.64,
+      "max_streak": 27,
+      "streak_loss_frac": 0.917,
+      "mean_snr": -12.46,
+      "days": [
+        0
+      ]
+    },
+    "909.5|7|a2b": {
+      "n": 200,
+      "ok": 185,
+      "rate": 0.925,
+      "max_streak": 2,
+      "streak_loss_frac": 0.133,
+      "mean_snr": -10.25,
+      "days": [
+        0
+      ]
+    },
+    "909.5|7|b2a": {
+      "n": 200,
+      "ok": 136,
+      "rate": 0.68,
+      "max_streak": 49,
+      "streak_loss_frac": 0.875,
+      "mean_snr": -12.14,
+      "days": [
+        0
+      ]
+    },
+    "909.5|8|a2b": {
+      "n": 200,
+      "ok": 180,
+      "rate": 0.9,
+      "max_streak": 2,
+      "streak_loss_frac": 0.2,
+      "mean_snr": -10.04,
+      "days": [
+        0
+      ]
+    },
+    "909.5|8|b2a": {
+      "n": 200,
+      "ok": 63,
+      "rate": 0.315,
+      "max_streak": 45,
+      "streak_loss_frac": 0.971,
+      "mean_snr": -12.13,
+      "days": [
+        0
+      ]
+    },
+    "910.0|5|a2b": {
+      "n": 200,
+      "ok": 166,
+      "rate": 0.83,
+      "max_streak": 4,
+      "streak_loss_frac": 0.382,
+      "mean_snr": -10.72,
+      "days": [
+        0
+      ]
+    },
+    "910.0|5|b2a": {
+      "n": 199,
+      "ok": 123,
+      "rate": 0.6180904522613065,
+      "max_streak": 44,
+      "streak_loss_frac": 0.934,
+      "mean_snr": -11.6,
+      "days": [
+        0
+      ]
+    },
+    "910.0|6|a2b": {
+      "n": 200,
+      "ok": 175,
+      "rate": 0.875,
+      "max_streak": 2,
+      "streak_loss_frac": 0.08,
+      "mean_snr": -10.48,
+      "days": [
+        0
+      ]
+    },
+    "910.0|6|b2a": {
+      "n": 199,
+      "ok": 103,
+      "rate": 0.5175879396984925,
+      "max_streak": 34,
+      "streak_loss_frac": 0.948,
+      "mean_snr": -11.85,
+      "days": [
+        0
+      ]
+    },
+    "910.0|7|a2b": {
+      "n": 200,
+      "ok": 179,
+      "rate": 0.895,
+      "max_streak": 2,
+      "streak_loss_frac": 0.381,
+      "mean_snr": -10.31,
+      "days": [
+        0
+      ]
+    },
+    "910.0|7|b2a": {
+      "n": 199,
+      "ok": 104,
+      "rate": 0.5226130653266332,
+      "max_streak": 48,
+      "streak_loss_frac": 0.947,
+      "mean_snr": -11.91,
+      "days": [
+        0
+      ]
+    },
+    "910.0|8|a2b": {
+      "n": 200,
+      "ok": 184,
+      "rate": 0.92,
+      "max_streak": 1,
+      "streak_loss_frac": 0.0,
+      "mean_snr": -10.42,
+      "days": [
+        0
+      ]
+    },
+    "910.0|8|b2a": {
+      "n": 197,
+      "ok": 138,
+      "rate": 0.700507614213198,
+      "max_streak": 34,
+      "streak_loss_frac": 0.864,
+      "mean_snr": -12.15,
+      "days": [
+        0
+      ]
+    },
+    "910.1|5|a2b": {
+      "n": 400,
+      "ok": 265,
+      "rate": 0.6625,
+      "max_streak": 19,
+      "streak_loss_frac": 0.44,
+      "mean_snr": -10.99,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "910.1|5|b2a": {
+      "n": 400,
+      "ok": 361,
+      "rate": 0.9025,
+      "max_streak": 4,
+      "streak_loss_frac": 0.196,
+      "mean_snr": -11.94,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "910.1|6|a2b": {
+      "n": 400,
+      "ok": 262,
+      "rate": 0.655,
+      "max_streak": 13,
+      "streak_loss_frac": 0.604,
+      "mean_snr": -10.57,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "910.1|6|b2a": {
+      "n": 400,
+      "ok": 301,
+      "rate": 0.7525,
+      "max_streak": 40,
+      "streak_loss_frac": 0.518,
+      "mean_snr": -12.27,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "910.1|7|a2b": {
+      "n": 400,
+      "ok": 289,
+      "rate": 0.7225,
+      "max_streak": 12,
+      "streak_loss_frac": 0.468,
+      "mean_snr": -10.96,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "910.1|7|b2a": {
+      "n": 400,
+      "ok": 303,
+      "rate": 0.7575,
+      "max_streak": 42,
+      "streak_loss_frac": 0.727,
+      "mean_snr": -12.64,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "910.1|8|a2b": {
+      "n": 400,
+      "ok": 318,
+      "rate": 0.795,
+      "max_streak": 6,
+      "streak_loss_frac": 0.42,
+      "mean_snr": -11.01,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "910.1|8|b2a": {
+      "n": 399,
+      "ok": 305,
+      "rate": 0.7644110275689223,
+      "max_streak": 46,
+      "streak_loss_frac": 0.788,
+      "mean_snr": -12.37,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "910.5|5|a2b": {
+      "n": 200,
+      "ok": 170,
+      "rate": 0.85,
+      "max_streak": 3,
+      "streak_loss_frac": 0.367,
+      "mean_snr": -11.31,
+      "days": [
+        1
+      ]
+    },
+    "910.5|5|b2a": {
+      "n": 199,
+      "ok": 185,
+      "rate": 0.9296482412060302,
+      "max_streak": 2,
+      "streak_loss_frac": 0.143,
+      "mean_snr": -12.53,
+      "days": [
+        1
+      ]
+    },
+    "910.5|6|a2b": {
+      "n": 200,
+      "ok": 171,
+      "rate": 0.855,
+      "max_streak": 2,
+      "streak_loss_frac": 0.345,
+      "mean_snr": -11.2,
+      "days": [
+        1
+      ]
+    },
+    "910.5|6|b2a": {
+      "n": 200,
+      "ok": 185,
+      "rate": 0.925,
+      "max_streak": 2,
+      "streak_loss_frac": 0.133,
+      "mean_snr": -12.19,
+      "days": [
+        1
+      ]
+    },
+    "910.5|7|a2b": {
+      "n": 200,
+      "ok": 180,
+      "rate": 0.9,
+      "max_streak": 2,
+      "streak_loss_frac": 0.2,
+      "mean_snr": -11.3,
+      "days": [
+        1
+      ]
+    },
+    "910.5|7|b2a": {
+      "n": 200,
+      "ok": 187,
+      "rate": 0.935,
+      "max_streak": 3,
+      "streak_loss_frac": 0.538,
+      "mean_snr": -12.36,
+      "days": [
+        1
+      ]
+    },
+    "910.5|8|a2b": {
+      "n": 200,
+      "ok": 184,
+      "rate": 0.92,
+      "max_streak": 2,
+      "streak_loss_frac": 0.25,
+      "mean_snr": -11.26,
+      "days": [
+        1
+      ]
+    },
+    "910.5|8|b2a": {
+      "n": 199,
+      "ok": 186,
+      "rate": 0.9346733668341709,
+      "max_streak": 2,
+      "streak_loss_frac": 0.154,
+      "mean_snr": -12.23,
+      "days": [
+        1
+      ]
+    },
+    "913.0|5|a2b": {
+      "n": 200,
+      "ok": 172,
+      "rate": 0.86,
+      "max_streak": 2,
+      "streak_loss_frac": 0.143,
+      "mean_snr": -11.64,
+      "days": [
+        1
+      ]
+    },
+    "913.0|5|b2a": {
+      "n": 200,
+      "ok": 103,
+      "rate": 0.515,
+      "max_streak": 37,
+      "streak_loss_frac": 0.866,
+      "mean_snr": -12.62,
+      "days": [
+        1
+      ]
+    },
+    "913.0|6|a2b": {
+      "n": 200,
+      "ok": 163,
+      "rate": 0.815,
+      "max_streak": 4,
+      "streak_loss_frac": 0.459,
+      "mean_snr": -11.97,
+      "days": [
+        1
+      ]
+    },
+    "913.0|6|b2a": {
+      "n": 198,
+      "ok": 104,
+      "rate": 0.5252525252525253,
+      "max_streak": 39,
+      "streak_loss_frac": 0.894,
+      "mean_snr": -13.36,
+      "days": [
+        1
+      ]
+    },
+    "913.0|7|a2b": {
+      "n": 200,
+      "ok": 178,
+      "rate": 0.89,
+      "max_streak": 2,
+      "streak_loss_frac": 0.182,
+      "mean_snr": -11.63,
+      "days": [
+        1
+      ]
+    },
+    "913.0|7|b2a": {
+      "n": 200,
+      "ok": 104,
+      "rate": 0.52,
+      "max_streak": 44,
+      "streak_loss_frac": 0.885,
+      "mean_snr": -12.86,
+      "days": [
+        1
+      ]
+    },
+    "913.0|8|a2b": {
+      "n": 200,
+      "ok": 183,
+      "rate": 0.915,
+      "max_streak": 1,
+      "streak_loss_frac": 0.0,
+      "mean_snr": -11.65,
+      "days": [
+        1
+      ]
+    },
+    "913.0|8|b2a": {
+      "n": 200,
+      "ok": 145,
+      "rate": 0.725,
+      "max_streak": 28,
+      "streak_loss_frac": 0.764,
+      "mean_snr": -12.66,
+      "days": [
+        1
+      ]
+    },
+    "926.0|5|a2b": {
+      "n": 400,
+      "ok": 348,
+      "rate": 0.87,
+      "max_streak": 2,
+      "streak_loss_frac": 0.121,
+      "mean_snr": -10.63,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "926.0|5|b2a": {
+      "n": 400,
+      "ok": 397,
+      "rate": 0.9925,
+      "max_streak": 1,
+      "streak_loss_frac": 0.0,
+      "mean_snr": -10.88,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "926.0|6|a2b": {
+      "n": 400,
+      "ok": 330,
+      "rate": 0.825,
+      "max_streak": 3,
+      "streak_loss_frac": 0.155,
+      "mean_snr": -10.31,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "926.0|6|b2a": {
+      "n": 399,
+      "ok": 395,
+      "rate": 0.9899749373433584,
+      "max_streak": 1,
+      "streak_loss_frac": 0.0,
+      "mean_snr": -10.53,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "926.0|7|a2b": {
+      "n": 400,
+      "ok": 338,
+      "rate": 0.845,
+      "max_streak": 2,
+      "streak_loss_frac": 0.098,
+      "mean_snr": -10.05,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "926.0|7|b2a": {
+      "n": 400,
+      "ok": 397,
+      "rate": 0.9925,
+      "max_streak": 1,
+      "streak_loss_frac": 0.0,
+      "mean_snr": -10.78,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "926.0|8|a2b": {
+      "n": 400,
+      "ok": 325,
+      "rate": 0.8125,
+      "max_streak": 3,
+      "streak_loss_frac": 0.199,
+      "mean_snr": -10.45,
+      "days": [
+        0,
+        1
+      ]
+    },
+    "926.0|8|b2a": {
+      "n": 399,
+      "ok": 395,
+      "rate": 0.9899749373433584,
+      "max_streak": 1,
+      "streak_loss_frac": 0.0,
+      "mean_snr": -11.26,
+      "days": [
+        0,
+        1
+      ]
+    }
+  }
+}
