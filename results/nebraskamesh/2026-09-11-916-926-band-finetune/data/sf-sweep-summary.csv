@@ -1,0 +1,13 @@
+combination,trials_ok
+"916.700 MHz, BW 500 kHz, SF9, CR4/8, 22 dBm, preamble 32 [a2b]: 46/60"
+"916.700 MHz, BW 500 kHz, SF9, CR4/8, 22 dBm, preamble 32 [b2a]: 24/60"
+"916.700 MHz, BW 500 kHz, SF10, CR4/8, 22 dBm, preamble 32 [a2b]: 47/60"
+"916.700 MHz, BW 500 kHz, SF10, CR4/8, 22 dBm, preamble 32 [b2a]: 0/60"
+"916.700 MHz, BW 500 kHz, SF11, CR4/8, 22 dBm, preamble 32 [a2b]: 49/60"
+"916.700 MHz, BW 500 kHz, SF11, CR4/8, 22 dBm, preamble 32 [b2a]: 55/59"
+"926.050 MHz, BW 500 kHz, SF9, CR4/8, 22 dBm, preamble 32 [a2b]: 51/60"
+"926.050 MHz, BW 500 kHz, SF9, CR4/8, 22 dBm, preamble 32 [b2a]: 57/60"
+"926.050 MHz, BW 500 kHz, SF10, CR4/8, 22 dBm, preamble 32 [a2b]: 54/60"
+"926.050 MHz, BW 500 kHz, SF10, CR4/8, 22 dBm, preamble 32 [b2a]: 60/60"
+"926.050 MHz, BW 500 kHz, SF11, CR4/8, 22 dBm, preamble 32 [a2b]: 47/59"
+"926.050 MHz, BW 500 kHz, SF11, CR4/8, 22 dBm, preamble 32 [b2a]: 60/60"
