@@ -282,6 +282,7 @@ their own measurements before committing.
 | 6 | Burst-resilience deep dive — 909.1 vs 909.6 × SF10/11 × CR4/5 vs CR4/8, interleaved | 2026-09-11 midday | [2026-09-11-9091-9096-burst-resilience](2026-09-11-9091-9096-burst-resilience/) |
 | 7 | 909.00–909.75 MHz fine-tune — can any 909 channel dodge the bursts? | 2026-09-11 PM | [2026-09-11-909-band-finetune](2026-09-11-909-band-finetune/) |
 | 8 | 916.3–916.9 + 926.0–926.5 fine-tune + SF sweep — the 926 verdict | 2026-09-11 PM | [2026-09-11-916-926-band-finetune](2026-09-11-916-926-band-finetune/) |
+| 9 | CR4/5–4/8 selection at 909.5 / 910.0 / 910.1 / 926.0, 4 interleaved passes | 2026-09-12 | [2026-09-12-cr-selection](2026-09-12-cr-selection/) |
 
 ## For the record
 
