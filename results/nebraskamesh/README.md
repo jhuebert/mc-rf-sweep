@@ -127,9 +127,6 @@ Three follow-ups ran the same morning:
   CR4/8's redundancy genuinely contains burst damage — worst loss streaks
   shrank from 38–53 packets to 22–23 — and crowned **909.1/SF10/CR4/8 the
   daytime winner at 85% worst-direction**.
-- The same deep dive exposed one strange, still-unexplained exception:
-  **909.6/SF10/CR4/8 collapsed to 36%**. Whatever the mechanism, don't
-  deploy that combination.
 
 ### 5. The afternoon that settled it — [909 fine-tune](2026-09-11-909-band-finetune/) · [916/926 fine-tune](2026-09-11-916-926-band-finetune/)
 
@@ -190,8 +187,6 @@ campaigns; it doesn't change the ranking.
   contains burst damage (worst streaks 38–53 → 22–23). At SF10 it costs
   ~22% airtime for +4 points of delivery, so **CR4/6 is the value pick
   where the channel is quiet**. CR4/7 fills no niche.
-- **One combination is measurably broken:** 909.6/SF10/CR4/8 (36% pooled
-  over 360 trials). Never deploy it.
 
 **5. Wide vs narrow is a genuine trade, not a winner.** The 62.5 kHz US
 defaults out-delivered every 500 kHz cell during bursty daytime periods —
@@ -223,16 +218,47 @@ test kit.
 | Best available in the busy lower band | 909.05–909.1 MHz · SF10 · CR4/8 | 85–94% when clean; sags toward ~55–75% in busy windows | 1026 bit/s | [burst deep dive](2026-09-11-9091-9096-burst-resilience/), [909 fine-tunes](2026-09-11-909-band-finetune/) |
 | Slow-but-bulletproof baseline | 910.525 MHz · 62.5 kHz · SF7 (US defaults) | 91–97% in **every** session | 10–30× slower | all campaigns |
 
-**Do not deploy:** 909.6/SF10/CR4/8 (pathological, 36%) · anything in
-922–923.4 MHz (the worst stretch of the band) · 903.1 below SF9 (its
-gazebo→indoor direction dies at low SF) · SF7 or SF11 at 500 kHz in
-daytime. 909.6 remains a workable backup center — just never with
-SF10/CR4/8 — and 903.1/906.5 were never re-confirmed at depth.
+**Do not deploy:** anything in 922–923.4 MHz (the worst stretch of the
+band) · 903.1 below SF9 (its gazebo→indoor direction dies at low SF) ·
+SF7 or SF11 at 500 kHz in daytime. 903.1/906.5 were never re-confirmed
+at depth.
+
+## Proposed US presets (my conclusion)
+
+Based on these location-specific results, here would be my proposal for
+three optional US 500 kHz bandwidth presets:
+
+- **909.75** — Clear of LongTurbo (908.75) by ~500 kHz and well below the
+  current 910.525/62.5 kHz default, so border-region Canada stays untouched.
+  Strong when clean, but the whole 909/910 neighborhood catches roaming
+  burst interference. Also has the benefit of being close enough to the
+  current US default frequency that filters and antennas should continue to
+  work as well as they did before.
+- **916.40** — Middle ground. Sits above the US915 LoRaWAN ladder, so no
+  overlap with LoRaWAN gear. At least here (Omaha) it is just as prone to
+  burst interference as 909/910 — this would be the preset I would drop if
+  we only wanted two presets.
+- **926.00** — Never lost a packet to burst interference across my whole
+  test campaign, and its emissions edge stays well clear of the 927.0 ham
+  repeater segment. There shouldn't be any ham interference.
+
+For the remaining settings, I would propose **SF10 and CR4/8**. This was
+the strongest settings pair I tested. The heavy coding rate meaningfully
+contains burst interference damage and retains an effective data rate
+around the same as the current US defaults. Furthermore, one could reduce
+CR to 5 if it worked for them. SF11, with double the airtime, was far more
+susceptible to dropping packets due to interference. SF10 could be just as
+controversial as frequency selection. 🤣
+
+Finally, I would propose we set the default path hash size at a minimum of
+2-byte. I think an argument could be made for 3-byte, since one can always
+reduce their path hash size if they need to.
+
+All of this is from one suburban path; local meshes should confirm with
+their own measurements before committing.
 
 ## What we'd still like to know
 
-- **The mechanism of the 909.6/SF10/CR4/8 anomaly** — a targeted retest
-  before anyone deploys that combination anywhere.
 - **Indoor-node mitigation at node A** (antenna relocation, filtering) —
   the highest-leverage improvement available on this path.
 - **Who the 902–917 burst emitters are.** The evidence says hopping,
