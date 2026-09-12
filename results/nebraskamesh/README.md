@@ -225,34 +225,36 @@ at depth.
 
 ## Proposed US presets (my conclusion)
 
-Based on these location-specific results, here would be my proposal for
-three optional US 500 kHz bandwidth presets:
+Updated 2026-09-12 after the CR-selection campaign. Based on these
+location-specific results, here would be my proposal for **two** optional
+US 500 kHz bandwidth presets:
 
-- **909.75** — Clear of LongTurbo (908.75) by ~500 kHz and well below the
-  current 910.525/62.5 kHz default, so border-region Canada stays untouched.
-  Strong when clean, but the whole 909/910 neighborhood catches roaming
-  burst interference. Also has the benefit of being close enough to the
-  current US default frequency that filters and antennas should continue to
-  work as well as they did before.
-- **916.40** — Middle ground. Sits above the US915 LoRaWAN ladder, so no
-  overlap with LoRaWAN gear. At least here (Omaha) it is just as prone to
-  burst interference as 909/910 — this would be the preset I would drop if
-  we only wanted two presets.
-- **926.00** — Never lost a packet to burst interference across my whole
-  test campaign, and its emissions edge stays well clear of the 927.0 ham
-  repeater segment. There shouldn't be any ham interference.
+- **910.1** — Best lower-band cell in the CR-selection campaign: 89%
+  worst-direction, and the only 909/910-area cell that never took a
+  pass-level wipe. Clear of LongTurbo (908.75) by ~850 kHz, and close
+  enough to the current US default frequency that filters and antennas
+  should work as well as they did before. Two honest caveats: it sits
+  closer to the 910.525/62.5 kHz default (~150 kHz of clearance to the
+  default channel edge) than a lower pick like 909.75 would, so
+  border-region Canada deserves a check; and it is still burst-exposed —
+  its clean campaign here could be luck.
+- **926.0** — Never lost a packet to burst interference across two full
+  days of testing, and its emissions edge stays well clear of the 927.0
+  ham repeater segment. There shouldn't be any ham interference.
+  (916.40 is dropped: in the 2026-09-12 campaign it is just as
+  burst-prone as the 909/910 ridge, with nothing to recommend it.)
 
-For the remaining settings, I would propose **SF10 and CR4/8**. This was
-the strongest settings pair I tested. The heavy coding rate meaningfully
-contains burst interference damage and retains an effective data rate
-around the same as the current US defaults. Furthermore, one could reduce
-CR to 5 if it worked for them. SF11, with double the airtime, was far more
-susceptible to dropping packets due to interference. SF10 could be just as
-controversial as frequency selection. 🤣
+For the remaining settings, I would propose **SF10 and CR4/7**. At 926
+the whole CR ladder was statistically tied, so CR4/7 costs nothing on the
+quiet channel, while its extra redundancy hedges the burst-prone 910.1
+channel at a modest airtime premium over CR4/5 — a middle ground between
+the speed of CR4/5 and the burst-resilience of CR4/8. SF11, with double
+the airtime, was far more susceptible to dropping packets due to
+interference. SF10 could be just as controversial as frequency selection.
+🤣
 
-Finally, I would propose we set the default path hash size at a minimum of
-2-byte. I think an argument could be made for 3-byte, since one can always
-reduce their path hash size if they need to.
+Finally, I would propose we set the default path hash size at 3-byte.
+One can always reduce their path hash size if they need to.
 
 All of this is from one suburban path; local meshes should confirm with
 their own measurements before committing.
