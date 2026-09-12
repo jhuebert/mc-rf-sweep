@@ -1,137 +1,278 @@
-# NebraskaMesh — Bellevue, NE test site
+# NebraskaMesh — Bellevue, NE radio-link testing
 
-Two fixed openhop_modem nodes ~3.9 miles (6.3 km) apart in Bellevue,
-Nebraska, USA, suburban residential path.
+## Why we did this
 
-## Nodes
+NebraskaMesh runs LoRa radios in the 902–928 MHz band, and before committing
+the network to a channel and a set of radio settings, we wanted real answers
+instead of guesswork. That band is shared, noisy, and surprisingly lumpy —
+two frequencies 100 kHz apart can behave completely differently, and the same
+frequency can be clean at 3 a.m. and unusable at 10 a.m. Picking badly can
+quietly cost you half your messages.
 
-| | Node A (trace initiator) | Node B |
+So over two days (2026-09-10 → 09-11) we pointed two real radios at each
+other across a real 3.9-mile suburban path — one indoors in a house, one
+outdoors in a backyard — and had them exchange roughly **70,000 test
+messages** while sweeping every dial the radio has: frequency, spreading
+factor, coding rate, bandwidth, transmit power, payload size, and preamble
+length. The question was simple: **which settings deliver the most messages,
+most of the time, on this path?**
+
+Each linked report below is the detailed record of one test session. This
+README is the plain-language summary: what we tried, what we found, and what
+we recommend.
+
+## The two radios
+
+| | Node A — the indoor node ("aries") | Node B — the gazebo node ("lynx") |
 |---|---|---|
-| Hardware | Seeed XIAO WIO (ESP32-S3 + SX1262), openhop_modem firmware | Heltec v4.2, openhop_modem firmware |
+| Hardware | Seeed XIAO WIO (ESP32-S3 + SX1262) | Heltec v4.2 |
+| Firmware | openhop_modem | openhop_modem |
 | TX power | 22 dBm (standard node power) | 22 dBm |
-| Antenna | DIY quarter-wave ground plane | Muziworks whip, hung upside down |
-| Placement | Indoors, on a dresser, second floor of a house (~15 ft AGL) | Outdoors under a backyard gazebo (~6 ft AGL) |
+| Antenna | DIY quarter-wave ground plane | Muziworks whip (hung upside down) |
+| Placement | Indoors, on a dresser, second floor of a house (~15 ft) | Outdoors under a backyard gazebo (~6 ft) |
 
-Path: Node A's house → Node B's (parents') backyard, ~3.9 mi.
+The nodes sit ~3.9 miles (6.3 km) apart in Bellevue, Nebraska — a typical
+suburban residential path. Each radio is driven by a small host computer,
+and the two hosts are linked over a VPN, so a single script could reprogram
+both radios live, all day and all night, without anyone touching them.
 
-## Results overview — all campaigns, net
+**How a test works:** one radio sends a stream of numbered test packets;
+the other logs which ones arrive. **Delivery % = the share that arrived.**
+We always test both directions separately, because they are not equal — and
+this turned out to be one of the biggest findings of all (see below). When
+a number appears in this summary, assume it is the **worse** direction,
+because that is the number that decides whether the link actually works.
 
-Six campaigns (2026-09-10 → 09-11), ≈44,000 one-way trials on one 3.9 mi
-suburban path: indoor node ↔ gazebo node, 22 dBm, 500 kHz BW unless noted.
-This section is the roll-up; per-campaign reports below have the detail.
+Three pieces of jargon worth knowing up front:
 
-### Recommended operating points (net of all campaigns)
+- **Spreading factor (SF)** — the speed-vs-reach trade. SF7 is fastest but
+  weakest; SF12 is slowest but toughest.
+- **Coding rate (CR)** — how much error-correction redundancy is packed
+  into each packet. CR4/5 is light; CR4/8 is heavy and forgiving.
+- **Bandwidth** — wide channels (500 kHz) are fast but hear all the
+  interference; narrow channels (62.5 kHz) are slow but see only a sliver
+  of it.
 
-| Role | Config | Worst-direction delivery | Payload throughput (40 B) | Confirmed by |
+## The short version
+
+- **The interference — not distance — is the enemy on this path.** The link
+  rarely fails because the signal is too weak. It fails in short,
+  minute-scale bursts of noise that wipe out runs of packets, then vanish.
+- **The bursts follow the spectrum, not our houses.** Everything we tested
+  between 902 and 917 MHz got hit; nothing at 926 MHz ever did, during the
+  very same hours.
+- **So the recommendation is 926 MHz:** **926.05 (the whole 926.0–926.8
+  stretch is good), SF10, CR4/8** — ~87% worst-direction delivery in busy
+  daytime, 97–98% in quiet hours, and completely burst-free.
+- The best fallback inside the busy lower band is **909.05–909.1 at
+  SF10/CR4/8** — good when clean (85–94%), but it will bleed during burst
+  windows no matter which exact frequency you pick.
+- The slow narrow-band **US defaults** (910.525 MHz, 62.5 kHz, SF7)
+  delivered 91–97% in *every* session — the reliability benchmark, at
+  10–30× lower speed.
+- The single highest-leverage improvement available has nothing to do with
+  settings: **fix the indoor node** (antenna placement, filtering). It is
+  the bottleneck in every measurement we took.
+
+## The story of the testing
+
+Each campaign existed to answer the question the previous one raised. Read
+them in order and the recommendation builds itself.
+
+### 1. Map the band — [band sweep](2026-09-10-902-928-band-sweep/)
+
+First pass: 51 frequencies across the whole 902–928 band at 0.5 MHz
+spacing, ~244 messages each, at six speeds. The band is wildly uneven.
+There are good ridges (around 909, 906.5, 917, 923, and 927 MHz) and dead
+canyons — at 922.0 MHz **every one of ~240 messages was lost**, at every
+speed. Two more lessons: at 500 kHz bandwidth this path only supports the
+slower settings (SF7 delivered 3.5% band-wide, SF12 81%), and the
+narrow-band US defaults baseline delivered 93–97% — a hard act to beat on
+reliability, if you can live with its speed.
+
+### 2. Zoom in — [fine sweep](2026-09-10-fine-sweep/)
+
+The finalists deserved a closer look: a 0.1 MHz-resolution sweep around
+each. Every "peak" turned out to sit 0.1–0.4 MHz away from where the coarse
+grid placed it, and two finalists evaporated entirely under re-testing —
+their morning results had been flattered by lucky, quiet windows. Lesson:
+small samples lie on this channel; you must confirm at scale. The session
+produced a clean winner (909.6) and a four-frequency shortlist:
+**903.1 · 906.5 · 909.6 · 926.8**.
+
+### 3. Pick the settings — [overnight SF×CR campaign](2026-09-11-sf-cr-campaign/)
+
+Overnight, on the quiet channel, we tested every speed × error-correction
+combination on the three surviving frequencies — ~14,500 messages. **926.8
+emerged as the strongest frequency on the path** (97.5% worst-direction at
+SF10 at every coding rate). The settings rules also fell out cleanly:
+SF7 is unusable at 500 kHz on this path, SF8 works only with heavy
+error correction (CR4/8), SF10 is the operating point, and CR4/8 rescues
+marginal cells outright. We also measured the link's fade margin: ~12–14 dB
+— comfortable at full power, but a hard cliff if the path or antennas ever
+degrade.
+
+### 4. Morning reality check — [909.6 settings test](2026-09-11-9096-sfcr/) · [fine-tune](2026-09-11-9096-fine-tune/) · [burst deep dive](2026-09-11-9091-9096-burst-resilience/)
+
+The next morning at 909.6, delivery fell apart in stretches: healthy for a
+few minutes, then entire 20-packet runs lost, then healthy again within
+15 minutes. Critically, the narrow-band control run stayed healthy the
+whole time — the interference lives *inside* our wide 500 kHz window.
+Three follow-ups ran the same morning:
+
+- A 50 kHz-resolution zoom around 909.6 revealed the neighborhood is lumpy
+  at that scale, and **909.1 beat 909.6 head-to-head** (93.5% vs 87%) —
+  so the recommendation moved to 909.1.
+- An interleaved deep dive (five rounds across both frequencies) showed
+  CR4/8's redundancy genuinely contains burst damage — worst loss streaks
+  shrank from 38–53 packets to 22–23 — and crowned **909.1/SF10/CR4/8 the
+  daytime winner at 85% worst-direction**.
+- The same deep dive exposed one strange, still-unexplained exception:
+  **909.6/SF10/CR4/8 collapsed to 36%**. Whatever the mechanism, don't
+  deploy that combination.
+
+### 5. The afternoon that settled it — [909 fine-tune](2026-09-11-909-band-finetune/) · [916/926 fine-tune](2026-09-11-916-926-band-finetune/)
+
+Two questions remained. First: can *any* frequency in the 909 region dodge
+the bursts? We swept 16 channels at 50 kHz spacing with interleaved passes
+— **all 16 got hit, in every single test phase**. No escape there; even the
+best cell (909.05) still bled.
+
+Second: does the emptier upper band escape them? We swept two candidate
+windows — 916.3–916.9 and 926.0–926.5 — in the same interleaved style, with
+a 909.10 control replicating the afternoon's baseline in between. The
+result was unambiguous: **every 916.x channel collapsed just like 909.x,
+while 926.0–926.5 never lost a single packet to a burst** — 95–98%
+delivery, worst streak of 2, across all six phases, during the same hours
+916 was dying. Same sites, same hardware, same afternoon: **the
+interference follows the spectrum, not our houses.** The emitters live in
+the busy 902–917 MHz region; 926 MHz is the quiet corner of the band.
+
+That is the verdict the whole effort converges on: **926.05 MHz, SF10,
+CR4/8** — 87% worst-direction in busy daytime conditions, 97–98% in the
+overnight quiet, and zero burst losses ever recorded.
+
+## What we learned
+
+**1. The failure mode is roaming interference windows, not weak signal.**
+Bursts of noise wipe out multi-packet runs (76–96% of losses into the
+indoor node arrive as streaks), last on the order of minutes, recover
+within ~15 minutes, and roam across frequencies and time. The radio path
+itself is healthy: packets that arrive during wipeouts show normal signal
+quality, so this is additive noise, not fading.
+
+**2. The indoor node is the bottleneck.** The gazebo radio received 90%+
+at every frequency and setting in every campaign. Deliveries *into* the
+indoor node are the weak direction essentially everywhere — it hears
+1.1–3.4 dB worse depending on frequency, and the local burst noise lands
+on it too. Relocating its antenna or adding filtering would buy more than
+any settings change we tested.
+
+**3. 926 MHz is the quiet corner — with one wrinkle to watch.** It is the
+only burst-free real estate found in the entire band. Interestingly, the
+usual direction asymmetry flips there: the gazebo→indoor direction is the
+strong one (96–98%) and indoor→gazebo runs a bit lower (80–87%) — but those
+losses are small, random, and unrelated to bursts. Worth watching in longer
+campaigns; it doesn't change the ranking.
+
+**4. The settings ladder is now fully mapped.**
+
+- **SF7: unusable** at 500 kHz on this path — no coding rate rescues it.
+  **SF8: only with CR4/8.** **SF10: the operating point.**
+- **SF11 is a bad trade in daytime:** its double-length packets just soak
+  in interference windows longer, and at 926 MHz it bought *zero* delivery
+  gain — the residual losses there aren't signal-strength problems that a
+  slower setting can fix. (In quiet overnight hours SF11 does fine, but
+  daytime is where real traffic lives.)
+- **SF9 is the legitimate fast option:** ~half the airtime of SF10 at
+  85–94% worst-direction.
+- **CR4/8 earns its cost below SF10** — it rescues marginal cells and
+  contains burst damage (worst streaks 38–53 → 22–23). At SF10 it costs
+  ~22% airtime for +4 points of delivery, so **CR4/6 is the value pick
+  where the channel is quiet**. CR4/7 fills no niche.
+- **One combination is measurably broken:** 909.6/SF10/CR4/8 (36% pooled
+  over 360 trials). Never deploy it.
+
+**5. Wide vs narrow is a genuine trade, not a winner.** The 62.5 kHz US
+defaults out-delivered every 500 kHz cell during bursty daytime periods —
+a narrow window simply hears a fraction of the wideband noise — while
+being 10–30× slower. Interference robustness and throughput pull in
+opposite directions on this band; 926 MHz is the rare place where a wide
+channel gets both.
+
+**6. The link budget is comfortable but not generous.** ~12–14 dB of fade
+margin at 926/SF10/CR4/8: delivery is flat down to 14 dBm transmit power
+and dead by 8 dBm. Treat 14 dBm as the warning line. Payload size
+(20–100 B) doesn't matter, and **preamble 8 is safe and saves ~49 ms per
+packet** at SF10.
+
+**7. A note for network planning beyond this site.** The 909.x region sits
+inside the LoRaWAN US915 channel ladder and is burst-susceptible
+ridge-wide — a poor choice for a national mesh channel. 926 MHz sits
+inside NextNav's 920–928 MHz license area (currently silent locally), with
+edge emissions clear of the ham repeater segments by construction. The
+full band-selection argument lives in `NATIONAL-FREQ-STRATEGY.md` in the
+test kit.
+
+## Recommended settings
+
+| Use this when | Settings | Worst-direction delivery | Speed (40 B) | Confirmed by |
 |---|---|---|---|---|
-| **Daytime primary** | **909.1 MHz / SF10 / CR4/8** | **85%** (n=360/dir) | 1026 bit/s | [burst-resilience](2026-09-11-9091-9096-burst-resilience/) |
-| Daytime max-throughput | 909.1 MHz / SF10 / CR4/5 | 81% (n=360/dir) | 1248 bit/s (1.22× US defaults) | [burst-resilience](2026-09-11-9091-9096-burst-resilience/) |
-| **Quiet-hours primary / most robust** | **926.8 MHz / SF10 / CR4/8** | 97.5% (matrix), 99% (deep pass) | 1026 bit/s | [overnight SF×CR](2026-09-11-sf-cr-campaign/) (n≥300/dir) |
-| Quiet-hours fast option | 926.8 MHz / SF9 / CR4/8 | 94% | ~1900 bit/s | [overnight SF×CR](2026-09-11-sf-cr-campaign/) |
-| Backup frequency | 909.6 MHz / SF10 / CR4/5 | 60% daytime; 90–96% in clean windows | 1248 bit/s | [fine-tune](2026-09-11-9096-fine-tune/), [SF×CR @909.6](2026-09-11-9096-sfcr/) |
-| US-defaults baseline | 910.525 MHz / 62.5 kHz / SF7 | 91–97% in **every** session | ~10–30× less than 500 kHz options | all campaigns |
+| **Primary — any time of day** | **926.05 MHz · SF10 · CR4/8** (the whole 926.0–926.8 stretch is good) | **87% daytime · 97–98% quiet hours** | 1026 bit/s | [916/926 fine-tune](2026-09-11-916-926-band-finetune/), [overnight SF×CR](2026-09-11-sf-cr-campaign/) |
+| Fast option at 926 | 926.05 MHz · SF9 · CR4/8 | 85–94% | ~1900 bit/s | [overnight SF×CR](2026-09-11-sf-cr-campaign/), [SF sweep](2026-09-11-916-926-band-finetune/) |
+| Best available in the busy lower band | 909.05–909.1 MHz · SF10 · CR4/8 | 85–94% when clean; sags toward ~55–75% in busy windows | 1026 bit/s | [burst deep dive](2026-09-11-9091-9096-burst-resilience/), [909 fine-tunes](2026-09-11-909-band-finetune/) |
+| Slow-but-bulletproof baseline | 910.525 MHz · 62.5 kHz · SF7 (US defaults) | 91–97% in **every** session | 10–30× slower | all campaigns |
 
-Other tested-but-not-recommended: **903.1** has a real b2a pathology at
-SF7–8 and never matched the leaders at scale; **906.5** was fine-sweep
-rank 16 and never re-confirmed at depth; **909.6/SF10/CR4/8 is
-measurably pathological** (36.1% b2a, n=360/dir) — don't deploy it.
+**Do not deploy:** 909.6/SF10/CR4/8 (pathological, 36%) · anything in
+922–923.4 MHz (the worst stretch of the band) · 903.1 below SF9 (its
+gazebo→indoor direction dies at low SF) · SF7 or SF11 at 500 kHz in
+daytime. 909.6 remains a workable backup center — just never with
+SF10/CR4/8 — and 903.1/906.5 were never re-confirmed at depth.
 
-### How the frequency recommendation evolved
+## What we'd still like to know
 
-1. **Band sweep** (0.5 MHz grid, n≈244/freq): finalists 909.5, 906.5,
-   923.0, 927.0, 917.0, 903.0; dead zones at 904.0, 908.0, 911.5–912.0,
-   919.0, 921.5–922.0 (922.0 lost 0/240), 924.0, 925.5.
-2. **Fine sweep** (0.1 MHz grid, n=160/freq): every finalist's true peak
-   moved 0.1–0.4 MHz; 923.0 and 917.0 collapsed under re-examination.
-   Winner 909.6; band-spread set **903.1 · 906.5 · 909.6 · 926.8**.
-3. **Overnight SF×CR**: **926.8 promoted to site frequency** (100%
-   worst-direction at SF10 at every CR); 909.6 demoted — recurring
-   minute-scale b2a interference windows that small-n passes missed.
-4. **Daytime SF×CR @909.6**: 500 kHz b2a collapsed during windows while
-   the 62.5 kHz defaults control stayed healthy; SF10 best, SF11 loses.
-5. **Fine-tune (0.05 MHz grid + head-to-head)**: the 909.x neighborhood
-   is lumpy at 50 kHz scale; **909.1 beat 909.6 head-to-head** (93.5% vs
-   87% worst) — recommendation switched to **909.1**.
-6. **Burst-resilience deep dive**: at n=360/dir, **909.1/SF10/CR4/8 is
-   the daytime winner** (85% worst, max loss streak 23 trials); 909.1
-   out-delivered 909.6 in matched rounds.
+- **The mechanism of the 909.6/SF10/CR4/8 anomaly** — a targeted retest
+  before anyone deploys that combination anywhere.
+- **Indoor-node mitigation at node A** (antenna relocation, filtering) —
+  the highest-leverage improvement available on this path.
+- **Who the 902–917 burst emitters are.** The evidence says hopping,
+  intermittent emitters in the occupied lower band; identifying them would
+  tell us whether the 909/916 region is permanently off-limits.
+- Whether the mild **926 MHz direction inversion** (a2b ~80–87%) is stable
+  or an artifact of these sessions.
+- **903.1 and 906.5** were never re-confirmed at depth; a diurnal (day-vs-
+  night) repeat of the original band sweep is also outstanding, as is a
+  fairness retest of SF11 overnight (low priority).
 
-**Net:** the 909.x ridge is the home — **909.1 primary, 909.6 backup** —
-with **926.8** as the quiet-hours/most-robust alternative. The 922–923.4
-stretch is the worst of the band.
+## Campaign index
 
-### What the channel taught us
+| # | Campaign | Date | Report |
+|---|---|---|---|
+| 1 | 902–928 MHz band sweep, 0.5 MHz grid, SF7–12 + US-defaults baseline | 2026-09-10 | [2026-09-10-902-928-band-sweep](2026-09-10-902-928-band-sweep/) |
+| 2 | Fine sweep, 0.1 MHz grid around the 6 finalists, SF9–10 + same-session control | 2026-09-10 | [2026-09-10-fine-sweep](2026-09-10-fine-sweep/) |
+| 3 | Overnight SF×CR matrix + finalist deep passes on 903.1 / 909.6 / 926.8 | 2026-09-10/11 | [2026-09-11-sf-cr-campaign](2026-09-11-sf-cr-campaign/) |
+| 4 | SF×CR selection at 909.6 (SF10/11 × CR4/5 vs CR4/8), morning pass + bursts | 2026-09-11 AM | [2026-09-11-9096-sfcr](2026-09-11-9096-sfcr/) |
+| 5 | 909.6 fine-tune — 0.05 MHz grid + 909.1 head-to-head | 2026-09-11 AM | [2026-09-11-9096-fine-tune](2026-09-11-9096-fine-tune/) |
+| 6 | Burst-resilience deep dive — 909.1 vs 909.6 × SF10/11 × CR4/5 vs CR4/8, interleaved | 2026-09-11 midday | [2026-09-11-9091-9096-burst-resilience](2026-09-11-9091-9096-burst-resilience/) |
+| 7 | 909.00–909.75 MHz fine-tune — can any 909 channel dodge the bursts? | 2026-09-11 PM | [2026-09-11-909-band-finetune](2026-09-11-909-band-finetune/) |
+| 8 | 916.3–916.9 + 926.0–926.5 fine-tune + SF sweep — the 926 verdict | 2026-09-11 PM | [2026-09-11-916-926-band-finetune](2026-09-11-916-926-band-finetune/) |
 
-- **Loss mode is minute-scale interference windows at the indoor node,
-  not fade holes.** Bursts at minimum legal spacing never lost two
-  packets in a row; 76–96% of b2a losses arrive in multi-packet streaks
-  from minute-scale windows. Windows are transient (recovery within
-  15 min) and roam across frequencies and rounds.
-- **The a2b direction (gazebo RX) is excellent everywhere** — 90%+
-  delivery at every frequency and config, max loss streak 2. Every
-  ranking in every campaign is a b2a story. Any indoor-node mitigation
-  (antenna move, filtering) buys more than any protocol choice.
-- **The indoor node hears 1.1–3.4 dB worse** depending on frequency;
-  it only bites where margin is thin (SF7–8, 903.1). 926.8 has the
-  smallest asymmetry — part of why it wins quiet hours.
-- **SF ladder:** SF7 is unusable at 500 kHz on this path (cliff sits
-  between SF8 and SF7, and no CR rescues it); SF8 only with CR4/8;
-  **SF10 is the operating point**; SF11 loses decisively in daytime
-  (its 2× airtime doubles window exposure) — if SF11, CR4/8 is
-  mandatory.
-- **Coding rate is a real lever below the ceiling:** CR4/8 buys +25 pp
-  at SF8 (926.8) and +48 pp (909.6 b2a) overnight, and contains burst
-  damage by day (streaks 38–53 → 22–23). At SF10 it costs ~22% airtime
-  for +4 pp — take **CR4/6** there for best value. CR4/7 fills no
-  niche. Exception: 909.6/SF10, where CR4/8 anomalously collapses.
-- **Link budget:** ~12–14 dB fade margin at 926.8/SF10/CR4/8 — flat
-  down to 14 dBm TX, dead by 8 dBm. Treat 14 dBm as the warning line.
-  Payload 20–100 B is insensitive; **preamble 8 is safe and saves
-  ~49 ms/packet** at SF10.
-- **Narrow vs wide is a genuine trade:** the 62.5 kHz US defaults
-  out-delivered every 500 kHz cell on b2a during bursty daytime periods
-  (the wide window sees more of the interference) while being ~10–30×
-  slower. Part 15 compliance and interference robustness are in direct
-  tension on this channel.
+## For the record
 
-### Open items
+**Control plane.** Each node's host computer runs `kit/api_server.py`,
+which owns the modem's TCP connection (port 5055) and exposes a small HTTP
+API. The two hosts are linked by a VPN so a single local orchestrator can
+script both radios — no manual intervention, no reboots, live
+frequency/SF changes between combinations.
 
-- Mechanism of the **909.6/SF10/CR4/8 anomaly** (36.1% b2a pooled) —
-  targeted retest before anyone deploys that combo.
-- **Indoor-node mitigation** at node A (antenna relocation, filtering)
-  — the highest-leverage improvement available.
-- **903.1 and 906.5** were never re-confirmed at n>40/dir; a diurnal
-  repeat of the band sweep is also outstanding.
-- Overnight **SF11** retest for fairness (daytime is what most traffic
-  lives in, so low priority).
+**Site notes.**
 
-## Control plane
-
-Each node's host computer runs `kit/api_server.py`, which owns the modem's
-TCP connection (port 5055) and exposes a small HTTP API. The two hosts are
-linked by a VPN so a single local orchestrator can script both radios —
-no manual intervention, no reboots, live frequency/SF changes between
-combinations.
-
-## Site notes
-
-- The indoor node (A) consistently hears ~2–4 dB worse than the outdoor
-  node (B) — visible in nearly every campaign as worse *b2a* delivery
-  (transmissions *into* the indoor node). Measured per-frequency in the
-  2026-09-11 overnight campaign: 1.1 dB (926.8) to 3.4 dB (903.1).
-- Node B's noise floor swings several dB between sessions (quiet ≈
-  −100 dBm, busy ≈ −95 dBm); Node A runs ≈ −101 to −103 dBm with
-  occasional strong local interference spikes (−66 dBm observed at
-  904.0/906.0 MHz during the 2026-09-10 campaign).
+- The indoor node (A) consistently hears ~1–3.4 dB worse than the outdoor
+  node, measured per frequency in the overnight campaign (1.1 dB at 926.8,
+  3.4 dB at 903.1). It shows up in nearly every campaign as worse delivery
+  *into* the indoor node.
+- Node B's noise floor swings several dB between sessions (quiet ≈ −100 dBm,
+  busy ≈ −95 dBm). Node A runs ≈ −101 to −103 dBm with occasional strong
+  local spikes (−66 dBm observed at 904.0/906.0 MHz during the band-sweep
+  day).
 - Interference environment: suburban; no intentional emitters of our own.
-
-## Campaigns
-
-| Campaign | Date | Report |
-|---|---|---|
-| 902–928 MHz band sweep, 500 kHz, SF7–12 + US-defaults baseline | 2026-09-10 | [2026-09-10-902-928-band-sweep](2026-09-10-902-928-band-sweep/) |
-| Fine sweep ±0.4 MHz @ 0.1 MHz around the 6 finalists, SF9–10 + same-session US-defaults control | 2026-09-10 | [2026-09-10-fine-sweep](2026-09-10-fine-sweep/) |
-| Overnight SF×CR matrix + finalist deep passes on the fine-sweep trio (903.1 / 909.6 / 926.8), unattended campaign driver | 2026-09-10/11 | [2026-09-11-sf-cr-campaign](2026-09-11-sf-cr-campaign/) |
-| SF×CR selection at 909.6 (SF10/11 × CR4/5/4/8), single morning pass + bursts + US-defaults control | 2026-09-11 AM | [2026-09-11-9096-sfcr](2026-09-11-9096-sfcr/) |
-| 909.6 fine-tune — 0.05 MHz grid around the incumbent + 909.1 head-to-head confirmation | 2026-09-11 AM | [2026-09-11-9096-fine-tune](2026-09-11-9096-fine-tune/) |
-| Burst-resilience deep dive — 909.1 vs 909.6 × SF10/11 × CR4/5/4/8, interleaved matrix + burst rounds | 2026-09-11 midday | [2026-09-11-9091-9096-burst-resilience](2026-09-11-9091-9096-burst-resilience/) |
