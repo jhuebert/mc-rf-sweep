@@ -11,7 +11,7 @@ quietly cost you half your messages.
 
 So over two days (2026-09-10 → 09-11) we pointed two real radios at each
 other across a real 3.9-mile suburban path — one indoors in a house, one
-outdoors in a backyard — and had them exchange roughly **70,000 test
+outdoors in a backyard — and had them exchange roughly **84,000 test
 messages** while sweeping every dial the radio has: frequency, spreading
 factor, coding rate, bandwidth, transmit power, payload size, and preamble
 length. The question was simple: **which settings deliver the most messages,
@@ -68,7 +68,7 @@ Three pieces of jargon worth knowing up front:
   SF10/CR4/8** — good when clean (85–94%), but it will bleed during burst
   windows no matter which exact frequency you pick.
 - The slow narrow-band **US defaults** (910.525 MHz, 62.5 kHz, SF7)
-  delivered 91–97% in *every* session — the reliability benchmark, at
+  delivered 92–98% in *every* session — the reliability benchmark, at
   10–30× lower speed.
 - The single highest-leverage improvement available has nothing to do with
   settings: **fix the indoor node** (antenna placement, filtering). It is
@@ -216,7 +216,7 @@ test kit.
 | **Primary — any time of day** | **926.05 MHz · SF10 · CR4/8** (the whole 926.0–926.8 stretch is good) | **87% daytime · 97–98% quiet hours** | 1026 bit/s | [916/926 fine-tune](2026-09-11-916-926-band-finetune/), [overnight SF×CR](2026-09-11-sf-cr-campaign/) |
 | Fast option at 926 | 926.05 MHz · SF9 · CR4/8 | 85–94% | ~1900 bit/s | [overnight SF×CR](2026-09-11-sf-cr-campaign/), [SF sweep](2026-09-11-916-926-band-finetune/) |
 | Best available in the busy lower band | 909.05–909.1 MHz · SF10 · CR4/8 | 85–94% when clean; sags toward ~55–75% in busy windows | 1026 bit/s | [burst deep dive](2026-09-11-9091-9096-burst-resilience/), [909 fine-tunes](2026-09-11-909-band-finetune/) |
-| Slow-but-bulletproof baseline | 910.525 MHz · 62.5 kHz · SF7 (US defaults) | 91–97% in **every** session | 10–30× slower | all campaigns |
+| Slow-but-bulletproof baseline | 910.525 MHz · 62.5 kHz · SF7 (US defaults) | 92–98% in **every** session | 10–30× slower | all campaigns |
 
 **Do not deploy:** anything in 922–923.4 MHz (the worst stretch of the
 band) · 903.1 below SF9 (its gazebo→indoor direction dies at low SF) ·
@@ -229,15 +229,20 @@ Updated 2026-09-12 after the CR-selection campaign. Based on these
 location-specific results, here would be my proposal for **two** optional
 US 500 kHz bandwidth presets:
 
-- **910.1** — Best lower-band cell in the CR-selection campaign: 89%
-  worst-direction, and the only 909/910-area cell that never took a
-  pass-level wipe. Clear of LongTurbo (908.75) by ~850 kHz, and close
+- **910.1** — Best lower-band cell in the first CR-selection campaign:
+  89% worst-direction, and the only 909/910-area cell that never took a
+  pass-level wipe there. Clear of LongTurbo (908.75) by ~850 kHz, and close
   enough to the current US default frequency that filters and antennas
-  should work as well as they did before. Two honest caveats: it sits
-  closer to the 910.525/62.5 kHz default (~150 kHz of clearance to the
-  default channel edge) than a lower pick like 909.75 would, so
-  border-region Canada deserves a check; and it is still burst-exposed —
-  its clean campaign here could be luck.
+  should work as well as they did before. **But the retest warned us off
+  treating it as settled:** in the same-day round-2 campaign its a2b
+  direction collapsed to 52% while b2a stayed healthy (87%) — the damage
+  flipped direction between rounds. Pooled across both rounds it is 71%
+  a2b / 79% b2a (n≈1,600/dir). Its clean first campaign looks like it was
+  luck, exactly as the caveat below feared. It remains the best-known
+  lower-band cell when it is clean, but expect burst sessions to hurt it.
+  It also sits closer to the 910.525/62.5 kHz default (~150 kHz of
+  clearance to the default channel edge) than a lower pick like 909.75
+  would, so border-region Canada deserves a check.
 - **926.0** — Never lost a packet to burst interference across two full
   days of testing, and its emissions edge stays well clear of the 927.0
   ham repeater segment. There shouldn't be any ham interference.
@@ -248,8 +253,11 @@ For the remaining settings, I would propose **SF10 and CR4/7**. At 926
 the whole CR ladder was statistically tied, so CR4/7 costs nothing on the
 quiet channel, while its extra redundancy hedges the burst-prone 910.1
 channel at a modest airtime premium over CR4/5 — a middle ground between
-the speed of CR4/5 and the burst-resilience of CR4/8. SF11, with double
-the airtime, was far more susceptible to dropping packets due to
+the speed of CR4/5 and the burst-resilience of CR4/8. (Pooled across both
+CR-selection rounds, the 926.0 ladder actually ran slightly *against*
+heavier CR — a2b: CR4/5 87%, CR4/6 83%, CR4/7 85%, CR4/8 81%, n≈400/dir
+each — so there is no evidence heavier CR buys anything at 926.) SF11,
+with double the airtime, was far more susceptible to dropping packets due to
 interference. SF10 could be just as controversial as frequency selection.
 🤣
 
@@ -267,7 +275,9 @@ their own measurements before committing.
   intermittent emitters in the occupied lower band; identifying them would
   tell us whether the 909/916 region is permanently off-limits.
 - Whether the mild **926 MHz direction inversion** (a2b ~80–87%) is stable
-  or an artifact of these sessions.
+  or an artifact of these sessions. *(Pooled update: three sessions now —
+  926.0–926.8 a2b 80–87% / b2a 94–99% every time, n≈2,000/dir at 926.0 —
+  so the inversion itself is confirmed; its cause is still open.)*
 - **903.1 and 906.5** were never re-confirmed at depth; a diurnal (day-vs-
   night) repeat of the original band sweep is also outstanding, as is a
   fairness retest of SF11 overnight (low priority).
@@ -294,6 +304,13 @@ which owns the modem's TCP connection (port 5055) and exposes a small HTTP
 API. The two hosts are linked by a VPN so a single local orchestrator can
 script both radios — no manual intervention, no reboots, live
 frequency/SF changes between combinations.
+
+**Data.** All campaign raw data lives in the test kit's SQLite database
+(`rf-sweep.db`: 109 runs / ~89,600 trials incl. legacy repeater-era data,
+13 campaigns), with per-packet SNR/RSSI, noise floors, one-way latency, and
+error reasons — so any claim in these reports can be re-derived or
+cross-checked with a single query. The per-campaign `data/` folders remain
+the portable/exportable copies.
 
 **Site notes.**
 
